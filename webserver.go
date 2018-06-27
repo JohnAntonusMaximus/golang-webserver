@@ -84,14 +84,18 @@ import (
 )
 
 var (
-	url  = ""
-	tmpl *template.Template
+	url    = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/71829/mona-lisa.jpg"
+	styles = "https://s3.amazonaws.com/static-kaizentek/styles.css"
+	tmpl   *template.Template
 )
 
 // https://images.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg?auto=compress&cs=tinysrgb&h=350
 
 func init() {
-	url = os.Args[1]
+	if len(os.Args) > 1 {
+		url = os.Args[1]
+		styles = os.Args[2]
+	}
 	tmpl = template.Must(template.ParseGlob("html/*"))
 }
 
@@ -127,7 +131,8 @@ func GenericHandler(response http.ResponseWriter, request *http.Request) {
 func HomeHandler(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("Content-type", "text/html")
 	source := map[string]interface{}{
-		"source": url,
+		"img": url,
+		"css": styles,
 	}
 	err := tmpl.ExecuteTemplate(response, "home.tmpl", source)
 	if err != nil {

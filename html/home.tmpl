@@ -19,10 +19,15 @@
       $.get("/item/foo", ajax_handler, "json");
     }
   </script>
+  <link href="{{ .css }}" rel='stylesheet' type='text/css'>
 </head>
 <body>
-  <h1>go server example</h1>
-  <p>The ajax request says the name is '<span id="the_span">?</span>'.</p>
-  <img src="{{ .source }}" alt="dog" style="height: 15%; width: 15%">
+<h1>Golang Art Gallery</h1>
+<div class="center">
+  <div class="frame" >
+    <img src="{{ .img }}" alt="dog">
+  </div>
+</div>
 </body>
+</div>
 </html>
