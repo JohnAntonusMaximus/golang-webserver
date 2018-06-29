@@ -177,8 +177,8 @@ func main() {
 	// Note that the "/" pattern matches all request URLs.
 	mux := http.NewServeMux()
 	mux.Handle("/", http.HandlerFunc(HomeHandler))
-	mux.Handle("/item/", http.HandlerFunc(ItemHandler))
-	mux.Handle("/generic/", http.HandlerFunc(GenericHandler))
+	mux.Handle("/item", http.HandlerFunc(ItemHandler))
+	mux.Handle("/generic", http.HandlerFunc(GenericHandler))
 
 	// Start listing on a given port with these routes on this server.
 	// (I think the server name can be set here too , i.e. "foo.org:8080")
