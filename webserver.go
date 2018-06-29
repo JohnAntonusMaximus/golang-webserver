@@ -84,8 +84,8 @@ import (
 )
 
 var (
-	url    = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/71829/mona-lisa.jpg"
-	styles = "https://s3.amazonaws.com/static-kaizentek/styles.css"
+	url    = "https://s3.amazonaws.com/react-web/mona-lisa.jpg"
+	styles = "https://s3.amazonaws.com/react-web/styles.css"
 	tmpl   *template.Template
 )
 
@@ -176,7 +176,7 @@ func main() {
 	// See gorilla/mux for a more powerful matching system.
 	// Note that the "/" pattern matches all request URLs.
 	mux := http.NewServeMux()
-	mux.Handle("/home", http.HandlerFunc(HomeHandler))
+	mux.Handle("/", http.HandlerFunc(HomeHandler))
 	mux.Handle("/item/", http.HandlerFunc(ItemHandler))
 	mux.Handle("/generic/", http.HandlerFunc(GenericHandler))
 
