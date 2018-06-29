@@ -167,7 +167,7 @@ func ItemHandler(response http.ResponseWriter, request *http.Request) {
 }
 
 func main() {
-	port := 80
+	port := 8080
 	portstring := strconv.Itoa(port)
 
 	// Register request handlers for two URL patterns.
