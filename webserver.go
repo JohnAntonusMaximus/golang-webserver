@@ -93,16 +93,13 @@ func main() {
 
 	status := make(chan string)
 	ticker := time.NewTicker(10 * time.Second)
-	failoverChan := make(chan bool)
-	var buffer int
+	failoverChan := make(chan bool, 2)
 
 	go func(s []string) {
 		for {
 			select {
 			case <-ticker.C:
-				buffer = len(s)
 				checkLinks(s, status, failoverChan)
-
 			case <-failoverChan:
 				failover = true
 			}
@@ -119,6 +116,7 @@ func main() {
 	go func() {
 		for {
 			fmt.Println(<-status)
+			fmt.Println()
 		}
 	}()
 
@@ -135,20 +133,29 @@ func main() {
 }
 
 func checkLinks(sites []string, status chan string, failoverChan chan bool) {
+
+	var count int
+
 	for _, site := range sites {
 		go func(s string) {
 			resp, err := http.Get(s)
 			if err != nil {
-				fmt.Println("Error Fetching Object! Failing over... ", err)
-				failoverChan <- true
+				status <- s + " - DOWN! Failing over to Google Cloud..."
+				count++
 			}
 			if resp.StatusCode != 200 {
-				fmt.Println("Error Fetching Object! Failing over... ", " - DOWN")
-				failoverChan <- true
+				status <- s + " - DOWN! Failing over to Google Cloud..."
+				count++
 			} else {
 				status <- s + " - OK"
-				failover = false
 			}
 		}(site)
 	}
+
+	if count > 0 {
+		failoverChan <- true
+	} else {
+		failover = false
+	}
+
 }
