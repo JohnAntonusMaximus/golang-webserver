@@ -137,22 +137,21 @@ func checkLinks(sites []string, status chan string, failoverChan chan bool) {
 	var count int
 
 	for _, site := range sites {
-		go func(s string) {
-			resp, err := http.Get(s)
-			if err != nil {
-				status <- s + " - DOWN! Failing over to Google Cloud..."
-				count++
-			}
-			if resp.StatusCode != 200 {
-				status <- s + " - DOWN! Failing over to Google Cloud..."
-				count++
-			} else {
-				status <- s + " - OK"
-			}
-		}(site)
+		resp, err := http.Get(site)
+		if err != nil {
+			status <- site + " - DOWN! Failing over to Google Cloud..."
+			count++
+		}
+		if resp.StatusCode != 200 {
+			status <- site + " - DOWN! Failing over to Google Cloud..."
+			count++
+		} else {
+			status <- site + " - OK"
+		}
 	}
 
 	if count > 0 {
+		failover = true
 		failoverChan <- true
 	} else {
 		failover = false
